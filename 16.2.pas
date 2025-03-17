@@ -1,36 +1,43 @@
 ﻿program R162;
 
-var
-  inputFile: Text;
-  wordList: array of string;
-  word: string;
-  count, i: Integer;
-  found: Boolean;
-begin
-  Assign(inputFile, '16.2.txt');
-  Reset(inputFile);
-  
-  count := 0;
-  while not Eof(inputFile) do
-  begin
-    ReadLn(inputFile, word);
-    found := False;
-    
-    for i := 0 to count - 1 do
-      if wordList[i] = word then
-      begin
-        found := True;
-        Break;
-      end;
-    
-    if not found then
-    begin
-      SetLength(wordList, count + 1);
-      wordList[count] := word;
-      count := count + 1;
-    end;
+type
+  PNode = ^TNode;
+  TNode = record
+    Data: Integer;
+    Next: PNode;
   end;
-  Close(inputFile);
-  
-  Writeln('количество слов: ', count);
+
+var
+  Head, Temp, Current: PNode;
+  i: Integer;
+
+begin
+  Head := nil;
+
+  for i := 10 downto 1 do
+  begin
+    New(Temp);
+    Temp^.Data := i;
+    Temp^.Next := Head;
+    Head := Temp;
+  end;
+
+  Writeln('список:');
+  Current := Head;
+  while Current <> nil do
+  begin
+    Write(Current^.Data, ' ');
+    Current := Current^.Next;
+  end;
+  Writeln;
+
+  Writeln('четные:');
+  Current := Head;
+  while Current <> nil do
+  begin
+    if (Current^.Data mod 2 = 0) then
+      Write(Current^.Data, ' ');
+    Current := Current^.Next;
+  end;
+  Writeln;
 end.
